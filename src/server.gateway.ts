@@ -10,8 +10,10 @@ export class ServerGateway {
   @WebSocketServer()
   server;
 
-  @SubscribeMessage('connect')
+  @SubscribeMessage('connected')
   handleConnect(client: Socket, data: string): void {
     console.log(client, data);
+
+    this.server.emit('connected', 'from server');
   }
 }
