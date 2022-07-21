@@ -23,7 +23,6 @@ export class ServerGateway {
     this.checkAndSend(client.id);
 
     this.sockets.get(client.id).repeater = setInterval(() => {
-      console.log(this.sockets);
       if (
         !this.sockets.get(client.id).isResponded &&
         this.sockets.get(client.id).attempts != 3
@@ -31,9 +30,15 @@ export class ServerGateway {
         this.checkAndSend(client.id);
       } else {
         if (this.sockets.get(client.id).isResponded) {
-          console.log(`client with id: ${client.id} has responded!`);
+          console.log(
+            `client with id: ${client.id} has responded in ${
+              this.sockets.get(client.id).attempts
+            } attempt(s)!`,
+          );
         } else {
-          console.log(`client with id: ${client.id} has not responded!`);
+          console.log(
+            `client with id: ${client.id} has not responded in 3 attempts!`,
+          );
         }
         clearInterval(this.sockets.get(client.id).repeater);
       }
@@ -42,18 +47,13 @@ export class ServerGateway {
 
   @SubscribeMessage('random')
   handleRandomMessage(client: Socket, data: string): void {
-    console.log(client.id, data);
-
     this.sockets.set(client.id, {
       ...this.sockets.get(client.id),
       isResponded: true,
-      attempts: 3,
     });
-    console.log(`random ${this.sockets}`);
   }
 
   checkAndSend(socketId) {
-    console.log(this.sockets);
     this.server.emit('conn-checked', 'from server');
     this.sockets.set(socketId, {
       ...this.sockets.get(socketId),
