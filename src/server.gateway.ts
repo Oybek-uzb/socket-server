@@ -22,25 +22,22 @@ export class ServerGateway {
 
     this.checkAndSend(client.id);
 
-    this.sockets.get(client.id).repeater = setInterval(() => {
-      if (
-        !this.sockets.get(client.id).isResponded &&
-        this.sockets.get(client.id).attempts != 3
-      ) {
+    const current_socket = this.sockets.get(client.id);
+
+    current_socket.repeater = setInterval(() => {
+      if (!current_socket.isResponded && current_socket.attempts != 3) {
         this.checkAndSend(client.id);
       } else {
-        if (this.sockets.get(client.id).isResponded) {
+        if (current_socket.isResponded) {
           console.log(
-            `client with id: ${client.id} has responded in ${
-              this.sockets.get(client.id).attempts
-            } attempt(s)!`,
+            `client with id: ${client.id} has responded in ${current_socket.attempts} attempt(s)!`,
           );
         } else {
           console.log(
             `client with id: ${client.id} has not responded in 3 attempts!`,
           );
         }
-        clearInterval(this.sockets.get(client.id).repeater);
+        clearInterval(current_socket.repeater);
       }
     }, 10000);
   }
