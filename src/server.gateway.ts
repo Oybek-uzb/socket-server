@@ -1,4 +1,8 @@
-import { SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import {
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway()
