@@ -5,13 +5,13 @@ import {
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway(80, { cors: true })
 export class ServerGateway {
   @WebSocketServer()
   server;
 
-  @SubscribeMessage('message')
-  handleMessage(client: Socket, data: string): void {
-    this.server.emit('message', data);
+  @SubscribeMessage('connect')
+  handleConnect(client: Socket, data: string): void {
+    console.log(client, data);
   }
 }
